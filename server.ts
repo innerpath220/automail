@@ -19,11 +19,16 @@ const auth = getAuth(firebaseApp);
 
 function getAiClient() {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error("GEMINI_API_KEY is not configured on the server.");
+  if (!apiKey || !apiKey.trim()) {
+    return null;
   }
 
   return new GoogleGenAI({ apiKey });
+}
+
+function isGeminiAuthError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return /reported as leaked|PERMISSION_DENIED|API key|API_KEY_INVALID|invalid api key|unauthorized/i.test(message);
 }
 
 function sleep(ms: number) {
@@ -424,6 +429,14 @@ function buildLeadPrompt(campaign: CampaignContext, leads: Lead[]) {
 
 async function processLeadBatch(campaign: CampaignContext, leads: Lead[]): Promise<EnrichedLead[]> {
   const ai = getAiClient();
+  if (!ai) {
+    return buildFallbackEnrichedLeads(
+      campaign,
+      leads,
+      "fallback drafts used because Gemini API key is not configured",
+    );
+  }
+
   const contents = buildLeadPrompt(campaign, leads) + "\n\nIMPORTANT: Return ONLY a valid JSON array. No markdown, no preamble.";
   const candidateModels = [
     process.env.GEMINI_MODEL?.trim(),
@@ -483,7 +496,19 @@ async function processLeadBatch(campaign: CampaignContext, leads: Lead[]): Promi
     return finalizeEnrichedLeads(campaign, withDrafts, leads);
   } catch (e) {
     console.error("Failed to parse AI response:", cleanedText);
-    return buildFallbackEnrichedLeads(campaign, leads, "fallback drafts used because AI returned invalid batch JSON");
+    if (isGeminiAuthError(e)) {
+      return buildFallbackEnrichedLeads(
+        campaign,
+        leads,
+        "fallback drafts used because Gemini rejected the API key",
+      );
+    }
+
+    return buildFallbackEnrichedLeads(
+      campaign,
+      leads,
+      "fallback drafts used because AI returned invalid batch JSON",
+    );
   }
 }
 
