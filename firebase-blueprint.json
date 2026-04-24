@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "UserSetting": {
+      "title": "User SMTP Settings",
+      "description": "Stores encrypted or plain-text (for this prototype) SMTP configuration for the user",
+      "type": "object",
+      "properties": {
+        "smtpHost": { "type": "string" },
+        "smtpPort": { "type": "string" },
+        "smtpUser": { "type": "string" },
+        "smtpPass": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderEmail": { "type": "string" }
+      },
+      "required": ["smtpHost", "smtpPort", "smtpUser", "smtpPass"]
+    },
+    "Campaign": {
+      "title": "Outreach Campaign",
+      "description": "Stores user campaign settings",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "goal": { "type": "string" },
+        "offer": { "type": "string" },
+        "cta": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}/settings/smtp": {
+      "schema": "UserSetting",
+      "description": "SMTP credentials for the user"
+    },
+    "/users/{userId}/campaigns/{campaignId}": {
+      "schema": "Campaign",
+      "description": "History of user campaigns"
+    }
+  }
+}

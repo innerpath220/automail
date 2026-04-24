@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    // Validation Helpers
+    function isValidSetting(data) {
+      return data.keys().hasAll(['smtpHost', 'smtpPort', 'smtpUser', 'smtpPass']) &&
+             data.keys().size() <= 7 && // Including optional fields
+             data.smtpHost is string && data.smtpHost.size() <= 256 &&
+             data.smtpPort is string && data.smtpPort.size() <= 5 &&
+             data.smtpUser is string && data.smtpUser.size() <= 256 &&
+             data.smtpPass is string && data.smtpPass.size() <= 512;
+    }
+
+    function isValidCampaign(data) {
+      return data.keys().hasAll(['userId', 'name', 'goal', 'offer', 'cta']) &&
+             data.userId == request.auth.uid &&
+             data.name is string && data.name.size() <= 128 &&
+             data.goal is string && data.goal.size() <= 1000 &&
+             data.offer is string && data.offer.size() <= 1000 &&
+             data.cta is string && data.cta.size() <= 512;
+    }
+
+    // User Paths
+    match /users/{userId} {
+      match /settings/smtp {
+        allow get: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidSetting(incoming());
+      }
+
+      match /campaigns/{campaignId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidCampaign(incoming());
+        allow update: if isOwner(userId) && isValidCampaign(incoming()) && 
+                         incoming().userId == existing().userId;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
