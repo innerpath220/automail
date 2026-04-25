@@ -1,49 +1,85 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default Deny
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // Common Helpers
     function isSignedIn() { return request.auth != null; }
     function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
     function incoming() { return request.resource.data; }
-    function existing() { return resource.data; }
-    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
 
-    // Validation Helpers
-    function isValidSetting(data) {
-      return data.keys().hasAll(['smtpHost', 'smtpPort', 'smtpUser', 'smtpPass']) &&
-             data.keys().size() <= 7 && // Including optional fields
-             data.smtpHost is string && data.smtpHost.size() <= 256 &&
-             data.smtpPort is string && data.smtpPort.size() <= 5 &&
-             data.smtpUser is string && data.smtpUser.size() <= 256 &&
-             data.smtpPass is string && data.smtpPass.size() <= 512;
+    function isStringField(value, max) {
+      return value is string && value.size() <= max;
     }
 
-    function isValidCampaign(data) {
-      return data.keys().hasAll(['userId', 'name', 'goal', 'offer', 'cta']) &&
-             data.userId == request.auth.uid &&
-             data.name is string && data.name.size() <= 128 &&
-             data.goal is string && data.goal.size() <= 1000 &&
-             data.offer is string && data.offer.size() <= 1000 &&
-             data.cta is string && data.cta.size() <= 512;
+    function isOptionalStringField(data, key, max) {
+      return !(key in data) || isStringField(data[key], max);
     }
 
-    // User Paths
+    function validProfile(data) {
+      return data.keys().hasAll([
+        'planId',
+        'subscriptionStatus',
+        'monthlyGenerationLimit',
+        'usedGenerationsThisPeriod',
+        'currentPeriodStart',
+        'currentPeriodEnd',
+        'updatedAt'
+      ]) &&
+      isStringField(data.planId, 32) &&
+      isStringField(data.subscriptionStatus, 32) &&
+      data.monthlyGenerationLimit is int &&
+      data.usedGenerationsThisPeriod is int &&
+      isStringField(data.currentPeriodStart, 64) &&
+      isStringField(data.currentPeriodEnd, 64) &&
+      isStringField(data.updatedAt, 64) &&
+      isOptionalStringField(data, 'stripeCustomerId', 128) &&
+      isOptionalStringField(data, 'stripeSubscriptionId', 128) &&
+      isOptionalStringField(data, 'lastCheckoutSessionId', 128);
+    }
+
+    function validService(data) {
+      return data.keys().hasAll([
+        'serviceType',
+        'displayName',
+        'encryptedSecrets',
+        'isActive',
+        'priority',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      isStringField(data.serviceType, 32) &&
+      isStringField(data.displayName, 128) &&
+      isStringField(data.encryptedSecrets, 4096) &&
+      data.isActive is bool &&
+      data.priority is int &&
+      isStringField(data.createdAt, 64) &&
+      isStringField(data.updatedAt, 64) &&
+      isOptionalStringField(data, 'senderName', 128) &&
+      isOptionalStringField(data, 'senderEmail', 256) &&
+      isOptionalStringField(data, 'smtpProvider', 32) &&
+      isOptionalStringField(data, 'smtpHost', 256) &&
+      isOptionalStringField(data, 'smtpPort', 8) &&
+      isOptionalStringField(data, 'smtpUser', 256) &&
+      (!( 'dailyCount' in data) || data.dailyCount is int) &&
+      (!( 'monthlyCount' in data) || data.monthlyCount is int) &&
+      isOptionalStringField(data, 'dailyKey', 32) &&
+      isOptionalStringField(data, 'monthlyKey', 32) &&
+      isOptionalStringField(data, 'lastSuccessAt', 64) &&
+      isOptionalStringField(data, 'lastFailureAt', 64) &&
+      isOptionalStringField(data, 'lastFailureReason', 512);
+    }
+
     match /users/{userId} {
-      match /settings/smtp {
-        allow get: if isOwner(userId);
-        allow create, update: if isOwner(userId) && isValidSetting(incoming());
+      match /profile/{profileId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && validProfile(incoming());
       }
 
-      match /campaigns/{campaignId} {
-        allow list, get: if isOwner(userId);
-        allow create: if isOwner(userId) && isValidCampaign(incoming());
-        allow update: if isOwner(userId) && isValidCampaign(incoming()) && 
-                         incoming().userId == existing().userId;
+      match /emailServices/{serviceId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && validService(incoming());
         allow delete: if isOwner(userId);
       }
     }

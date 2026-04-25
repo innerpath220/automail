@@ -1,41 +1,76 @@
 {
   "entities": {
-    "UserSetting": {
-      "title": "User SMTP Settings",
-      "description": "Stores encrypted or plain-text (for this prototype) SMTP configuration for the user",
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Plan, Stripe metadata, and monthly AI generation usage for a user",
       "type": "object",
       "properties": {
+        "planId": { "type": "string" },
+        "subscriptionStatus": { "type": "string" },
+        "monthlyGenerationLimit": { "type": "number" },
+        "usedGenerationsThisPeriod": { "type": "number" },
+        "currentPeriodStart": { "type": "string", "format": "date-time" },
+        "currentPeriodEnd": { "type": "string", "format": "date-time" },
+        "stripeCustomerId": { "type": "string" },
+        "stripeSubscriptionId": { "type": "string" },
+        "lastCheckoutSessionId": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "planId",
+        "subscriptionStatus",
+        "monthlyGenerationLimit",
+        "usedGenerationsThisPeriod",
+        "currentPeriodStart",
+        "currentPeriodEnd",
+        "updatedAt"
+      ]
+    },
+    "EmailService": {
+      "title": "Email Service Connection",
+      "description": "Encrypted provider credentials and usage counters for one connected sending service",
+      "type": "object",
+      "properties": {
+        "serviceType": { "type": "string" },
+        "displayName": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderEmail": { "type": "string" },
+        "smtpProvider": { "type": "string" },
         "smtpHost": { "type": "string" },
         "smtpPort": { "type": "string" },
         "smtpUser": { "type": "string" },
-        "smtpPass": { "type": "string" },
-        "senderName": { "type": "string" },
-        "senderEmail": { "type": "string" }
+        "encryptedSecrets": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "priority": { "type": "number" },
+        "dailyCount": { "type": "number" },
+        "dailyKey": { "type": "string" },
+        "monthlyCount": { "type": "number" },
+        "monthlyKey": { "type": "string" },
+        "lastSuccessAt": { "type": "string", "format": "date-time" },
+        "lastFailureAt": { "type": "string", "format": "date-time" },
+        "lastFailureReason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["smtpHost", "smtpPort", "smtpUser", "smtpPass"]
-    },
-    "Campaign": {
-      "title": "Outreach Campaign",
-      "description": "Stores user campaign settings",
-      "type": "object",
-      "properties": {
-        "userId": { "type": "string" },
-        "name": { "type": "string" },
-        "goal": { "type": "string" },
-        "offer": { "type": "string" },
-        "cta": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      }
+      "required": [
+        "serviceType",
+        "displayName",
+        "encryptedSecrets",
+        "isActive",
+        "priority",
+        "createdAt",
+        "updatedAt"
+      ]
     }
   },
   "firestore": {
-    "/users/{userId}/settings/smtp": {
-      "schema": "UserSetting",
-      "description": "SMTP credentials for the user"
+    "/users/{userId}/profile/main": {
+      "schema": "UserProfile",
+      "description": "Per-user billing and generation state"
     },
-    "/users/{userId}/campaigns/{campaignId}": {
-      "schema": "Campaign",
-      "description": "History of user campaigns"
+    "/users/{userId}/emailServices/{serviceId}": {
+      "schema": "EmailService",
+      "description": "Per-user sending service configuration and usage counters"
     }
   }
 }

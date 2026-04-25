@@ -9,13 +9,13 @@ interface CampaignFormProps {
 export const CampaignForm: React.FC<CampaignFormProps> = ({ campaign, onChange }) => {
   const loadTestStrategy = () => {
     onChange({
-      campaign_goal: 'Book 15-minute intro calls with local businesses that need more leads and better follow-up.',
-      offer: 'We set up AI-assisted lead capture, follow-up emails, and simple CRM workflows for service businesses.',
-      sender_name: 'Youssef',
-      sender_company: 'LeadGenius AI',
-      sender_email: 'innerpathbusiness@gmail.com',
-      sender_context: 'We help small businesses stop losing leads by automating outreach and follow-up with a lightweight setup.',
-      cta: 'Would you be open to a quick 15-minute call next week to see if this could fit your business?',
+      campaign_goal: 'Book intro calls with local businesses that need better lead follow-up.',
+      offer: 'We help service businesses automate lead capture and follow-up without adding heavy software.',
+      sender_name: 'Alex',
+      sender_company: 'InnerPath',
+      sender_email: 'alex@yourcompany.com',
+      sender_context: 'We help businesses respond faster to inbound leads and clean up follow-up workflows.',
+      cta: 'Would you be open to a quick call next week to see if this could help?',
       tone_preference: 'Professional',
     });
   };

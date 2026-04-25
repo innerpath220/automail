@@ -1,0 +1,13 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="automailBlue" x1="56" y1="200" x2="196" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="52" fill="#1C1D27"/>
+  <path d="M84 198H49L88 128L110 147L84 198Z" fill="url(#automailBlue)"/>
+  <path d="M118 147L78 107L116 56H151L174 98L156 112L136 74L104 118L128 142L164 106L201 144L180 198H145L156 164L118 147Z" fill="url(#automailBlue)"/>
+  <path d="M129 138L161 106H141L149 84L208 70L194 129L177 117V146L157 146L157 117L129 138Z" fill="url(#automailBlue)"/>
+  <path d="M127 160L159 198H124L97 176L127 160Z" fill="url(#automailBlue)"/>
+</svg>

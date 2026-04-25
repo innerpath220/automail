@@ -1,0 +1,17 @@
+<svg width="820" height="220" viewBox="0 0 820 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="automailBlueLockup" x1="64" y1="168" x2="182" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0 10)">
+    <path d="M84 172H54L88 111L108 127L84 172Z" fill="url(#automailBlueLockup)"/>
+    <path d="M116 127L81 92L114 46H145L166 83L150 96L133 62L105 101L126 122L157 91L190 125L171 172H141L151 141L116 127Z" fill="url(#automailBlueLockup)"/>
+    <path d="M126 119L154 91H136L143 72L195 59L183 111L168 100V126H150V100L126 119Z" fill="url(#automailBlueLockup)"/>
+    <path d="M124 139L152 172H121L96 153L124 139Z" fill="url(#automailBlueLockup)"/>
+  </g>
+  <text x="235" y="146" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="108" font-weight="800" letter-spacing="-3">
+    Automail <tspan fill="#3B82F6">AI</tspan>
+  </text>
+</svg>
