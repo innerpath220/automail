@@ -414,7 +414,7 @@ export const LeadInput: React.FC<LeadInputProps> = ({ onLeadsSubmit }) => {
   };
 
   return (
-    <div className="space-y-4 flex-1 flex flex-col min-h-0">
+    <div className="space-y-4 flex-1 flex min-w-0 flex-col min-h-0">
       <div className="flex justify-between items-center shrink-0">
         <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Audience Input</label>
         <button
@@ -464,12 +464,12 @@ export const LeadInput: React.FC<LeadInputProps> = ({ onLeadsSubmit }) => {
         const stats = getImportStats(leads);
         return (
           <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3 shrink-0">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Import Review</p>
                 <p className="text-sm text-white/80">{stats.total} leads total, {stats.missingEmail} missing email addresses</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => applyFilter('all')}

@@ -18,6 +18,6 @@
 @layer base {
   body {
     @apply bg-brand-bg text-brand-text antialiased;
+    overflow-x: hidden;
   }
 }
-

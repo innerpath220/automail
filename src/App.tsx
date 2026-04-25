@@ -401,9 +401,9 @@ export default function App() {
   );
 
   const renderDashboard = () => (
-    <div className="mx-auto max-w-7xl space-y-8 px-6 py-10">
+    <div className="mx-auto max-w-7xl space-y-8 overflow-x-hidden px-6 py-10">
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
+        <div className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.3em] text-blue-400">
@@ -440,7 +440,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
+        <div className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-white/35">Connected Services</div>
@@ -491,7 +491,7 @@ export default function App() {
       </div>
 
       <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
-        <section className="rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
+        <section className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
           <div className="flex items-center gap-3 border-b border-brand-border pb-6">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/20 text-sm font-bold text-blue-400">1</div>
             <h2 className="text-xl font-bold text-white">Campaign Strategy</h2>
@@ -501,7 +501,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
+        <section className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
           <div className="flex items-center gap-3 border-b border-brand-border pb-6">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600/20 text-sm font-bold text-blue-400">2</div>
             <h2 className="text-xl font-bold text-white">Audience & Generation</h2>
@@ -543,7 +543,7 @@ export default function App() {
       </div>
 
       <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr]">
-        <aside className="rounded-[32px] border border-brand-border bg-brand-surface p-6 shadow-2xl shadow-blue-950/20">
+        <aside className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-6 shadow-2xl shadow-blue-950/20">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-white/45">Generated Leads ({results.length})</h2>
             <span className="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-blue-300">
@@ -647,7 +647,7 @@ export default function App() {
           </div>
         </aside>
 
-        <section className="rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
+        <section className="min-w-0 rounded-[32px] border border-brand-border bg-brand-surface p-8 shadow-2xl shadow-blue-950/20">
           {selectedLead ? (
             <>
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -661,7 +661,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     onClick={() => {
                       const subject = encodeURIComponent(selectedLead.subject);

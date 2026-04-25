@@ -15,6 +15,14 @@ function buildUrl(path: string) {
   return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
 }
 
+function isGithubPagesHost() {
+  return typeof window !== 'undefined' && window.location.hostname.endsWith('github.io');
+}
+
+function getMissingApiBaseUrlMessage() {
+  return 'This GitHub Pages deployment is frontend-only. Set VITE_BILLING_API_BASE_URL to a deployed backend origin so /api requests do not go to github.io.';
+}
+
 function safeParseJson(raw: string) {
   if (!raw) {
     return {};
@@ -36,6 +44,12 @@ async function parseJson<T>(response: Response): Promise<T> {
   return data as T;
 }
 
+function assertApiConfigured() {
+  if (isGithubPagesHost() && !apiBaseUrl) {
+    throw new Error(getMissingApiBaseUrlMessage());
+  }
+}
+
 export async function fetchStripeConfig(): Promise<StripeCheckoutConfig> {
   try {
     const response = await fetch(buildUrl('/api/billing/config'));
@@ -50,6 +64,7 @@ export async function fetchStripeConfig(): Promise<StripeCheckoutConfig> {
 }
 
 export async function createCheckoutSession(idToken: string, planId: Exclude<PlanId, 'free'>) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/billing/checkout-session'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -59,6 +74,7 @@ export async function createCheckoutSession(idToken: string, planId: Exclude<Pla
 }
 
 export async function createPortalSession(idToken: string, customerId?: string) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/billing/portal-session'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -68,6 +84,7 @@ export async function createPortalSession(idToken: string, customerId?: string) 
 }
 
 export async function fetchUserProfile(idToken: string) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/user-profile'), {
     headers: {
       Authorization: `Bearer ${idToken}`,
@@ -77,6 +94,7 @@ export async function fetchUserProfile(idToken: string) {
 }
 
 export async function fetchEmailServices(idToken: string) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/email-services'), {
     headers: {
       Authorization: `Bearer ${idToken}`,
@@ -86,6 +104,7 @@ export async function fetchEmailServices(idToken: string) {
 }
 
 export async function saveEmailService(idToken: string, payload: EmailServiceConnectionInput) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/email-services'), {
     method: 'POST',
     headers: {
@@ -98,6 +117,7 @@ export async function saveEmailService(idToken: string, payload: EmailServiceCon
 }
 
 export async function updateEmailService(idToken: string, serviceId: string, payload: Partial<EmailServiceConnectionInput>) {
+  assertApiConfigured();
   const response = await fetch(buildUrl(`/api/email-services/${encodeURIComponent(serviceId)}`), {
     method: 'PATCH',
     headers: {
@@ -110,6 +130,7 @@ export async function updateEmailService(idToken: string, serviceId: string, pay
 }
 
 export async function deleteEmailService(idToken: string, serviceId: string) {
+  assertApiConfigured();
   const response = await fetch(buildUrl(`/api/email-services/${encodeURIComponent(serviceId)}`), {
     method: 'DELETE',
     headers: {
@@ -124,6 +145,7 @@ export async function processLeadsWithProfile(
   campaign: unknown,
   leads: unknown,
 ) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/process-leads'), {
     method: 'POST',
     headers: {
@@ -147,6 +169,7 @@ export async function sendGeneratedEmail(
     preferredServiceId?: string;
   },
 ) {
+  assertApiConfigured();
   const response = await fetch(buildUrl('/api/send-email'), {
     method: 'POST',
     headers: {

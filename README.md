@@ -24,8 +24,10 @@ Setup:
 3. Fill in at least:
    - `GROQ_API_KEY`
    - `SMTP_SETTINGS_ENCRYPTION_KEY`
-4. Add Stripe keys and price IDs if billing should work locally
-5. Start the app with `npm run dev`
+4. If the frontend is deployed on static hosting like GitHub Pages, also set:
+   - `VITE_BILLING_API_BASE_URL` to your deployed backend origin
+5. Add Stripe keys and price IDs if billing should work locally
+6. Start the app with `npm run dev`
 
 AI generation defaults to `Groq` through `AI_PROVIDER=groq`. The default model is `llama-3.3-70b-versatile`, and you can override it with `GROQ_MODEL`.
 
@@ -53,3 +55,9 @@ AI generation defaults to `Groq` through `AI_PROVIDER=groq`. The default model i
 - Pro: `2000` AI generations/month
 
 Email sending uses user-owned provider credentials. Pricing covers AI generation only.
+
+## GitHub Pages note
+
+GitHub Pages can only host the frontend. It cannot serve this app's `/api/*` routes.
+
+If you deploy the UI to GitHub Pages, you must also deploy the Express backend somewhere else and set `VITE_BILLING_API_BASE_URL` to that backend origin during the Pages build. Otherwise the frontend will try to call `/api/*` on `github.io`, which causes broken auth-adjacent account loads, lead processing, billing, and email sending.
