@@ -214,8 +214,8 @@ export const EmailJsGuidePage: React.FC<EmailJsGuidePageProps> = ({ onContinue, 
                 Connect every service once. Then let automatic rotation do the work.
               </h1>
               <p className="max-w-4xl text-lg leading-relaxed text-white/55">
-                Platform limits are only for AI message generations. Email sending limits are separate, belong to each connected provider, and rotate automatically in this order:
-                <span className="ml-2 font-bold text-white">EmailJS → Brevo → SendGrid → Resend → SMTP</span>.
+                Platform limits are only for AI message generations. Email sending limits are separate, belong to each connected provider, and rotate automatically in your chosen order.
+                <span className="ml-2 font-bold text-white">You can change the order however you want by dragging items in Manage Channels.</span>
               </p>
             </div>
 

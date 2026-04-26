@@ -379,7 +379,7 @@ export default function App() {
         <img src={automailLogo} alt="Automail AI" className="mx-auto h-20 w-auto" />
         <h1 className="mt-8 text-5xl font-black tracking-tight text-white">AI outreach with user-owned sending accounts.</h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/55">
-          Generate business messages with AI, rotate between EmailJS, Brevo, SendGrid, Resend, and SMTP, and keep your own costs focused on AI generations only.
+          Generate business messages with AI, rotate between EmailJS, Brevo, SendGrid, Resend, and SMTP in any order you want, and keep your own costs focused on AI generations only.
         </p>
         <div className="mt-10 flex flex-col items-center gap-4">
           <button
@@ -450,7 +450,7 @@ export default function App() {
               onClick={() => setActivePage('settings')}
               className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/65 hover:bg-white/10 hover:text-white"
             >
-              Manage
+              Manage Channels
             </button>
           </div>
           <div className="mt-6 space-y-3">
@@ -734,7 +734,7 @@ export default function App() {
             <img src={automailIcon} alt="Automail AI" className="h-7 w-7" />
             <div>
               <div className="text-lg font-semibold tracking-tight text-white">Automail <span className="text-blue-500">AI</span></div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/35">User-Owned Delivery Rotation</div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/35">Created by innerPath</div>
             </div>
           </div>
 
@@ -831,8 +831,8 @@ export default function App() {
       </main>
 
       <footer className="border-t border-brand-border bg-brand-surface px-6 py-3">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 text-[10px] font-bold uppercase tracking-widest text-white/35">
-          <div className="flex items-center gap-4">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 text-[10px] font-bold uppercase tracking-widest text-white/35 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-4">
             <span>AI limits: monthly generations</span>
             <span>Send limits: provider-based rotation</span>
           </div>
@@ -840,6 +840,14 @@ export default function App() {
             {activeServices.length === 0 ? <ShieldAlert size={12} className="text-red-300" /> : <CheckCircle2 size={12} className="text-green-300" />}
             <span>{activeServices.length === 0 ? 'No sending service connected' : `${activeServices.length} active sending services`}</span>
           </div>
+          <a
+            href="https://innerpath-zeta.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-400 transition-colors hover:text-blue-300"
+          >
+            innerpath-zeta.vercel.app
+          </a>
         </div>
       </footer>
     </div>

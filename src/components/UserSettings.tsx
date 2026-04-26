@@ -374,7 +374,7 @@ export const UserSettings: React.FC<UserSettingsProps> = ({ user, services, onSe
             </div>
             <h2 className="mt-4 text-4xl font-black tracking-tight text-white">Connect multiple services and let the platform rotate automatically.</h2>
             <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/55">
-              Users can add EmailJS, Brevo, SendGrid, Resend, and SMTP accounts. Drag the list into your preferred top-to-bottom order. Rotation follows that exact order and keeps trying the next service until one works.
+              Users can add EmailJS, Brevo, SendGrid, Resend, and SMTP accounts. You can change the order however you want by dragging items in Manage Channels. Rotation follows that exact order and keeps trying the next service until one works.
             </p>
           </div>
 
